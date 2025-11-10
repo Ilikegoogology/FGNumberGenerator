@@ -1,68 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fictional Googology Generator — Ver Γ</title>
-  <style>
-    body {
-      background: radial-gradient(circle at top, #0a0a15, #000);
-      color: #e8e8ff;
-      font-family: "JetBrains Mono", monospace;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-      margin: 0;
-    }
-    h1 { color: #8df; margin-bottom: 1rem; }
-    .generator {
-      background: rgba(255,255,255,0.05);
-      padding: 1.5rem 2rem;
-      border-radius: 16px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      width: 360px;
-      max-width: 90%;
-    }
-    label { display: block; margin: 0.5rem 0 0.25rem; font-weight: bold; }
-    input {
-      width: 100%; padding: 0.5rem; border: none; border-radius: 6px;
-      background: #111; color: #fff; text-align: center;
-    }
-    button {
-      margin-top: 1rem; padding: 0.6rem 1.2rem;
-      background: #0af; border: none; border-radius: 8px;
-      color: #000; font-weight: bold; cursor: pointer;
-      transition: 0.2s;
-    }
-    button:hover { background: #09f; transform: scale(1.05); }
-    .result { margin-top: 1.5rem; font-size: 1.2rem; word-wrap: break-word; }
-    .symbol { font-size: 1.8rem; margin-top: 0.8rem; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fictional Googology Generator — Ver 1.0</title>
+<style>
+  body {
+    background: radial-gradient(circle at top, #0a0a15, #000);
+    color: #e8e8ff;
+    font-family: "JetBrains Mono", monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    margin: 0;
+  }
+  h1 { color: #8df; margin-bottom: 1rem; }
+  .generator {
+    background: rgba(255,255,255,0.05);
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    width: 380px;
+    max-width: 90%;
+  }
+  label { display: block; margin: 0.5rem 0 0.25rem; font-weight: bold; }
+  input { width: 100%; padding: 0.5rem; border: none; border-radius: 6px; background: #111; color: #fff; text-align: center; }
+  button { margin-top: 1rem; padding: 0.6rem 1.2rem; background: #0af; border: none; border-radius: 8px; color: #000; font-weight: bold; cursor: pointer; transition: 0.2s; }
+  button:hover { background: #09f; transform: scale(1.05); }
+  .result { margin-top: 1.5rem; font-size: 1.2rem; word-wrap: break-word; }
+</style>
 </head>
 <body>
-<h1>Fictional Googology Generator — Ver Γ</h1>
+<h1>Fictional Googology Generator — Ver 1.0</h1>
 <div class="generator">
   <label for="nameWords">Number of Words (1–5):</label>
   <input type="number" id="nameWords" min="1" max="5" value="2">
 
-  <label for="symbolCount">Symbol Count:</label>
-  <input type="number" id="symbolCount" min="1" max="20" value="3">
+  <label for="capsToggle">Caps Lock:</label>
+  <button onclick="toggleCaps()">Toggle Caps</button>
+
+  <label for="customSep">Custom Separator (used if dotted style chosen):</label>
+  <input type="text" id="customSep" placeholder="- or ! or _ or …" value=".">
+
+  <label for="symbolCount">Number of Math Symbols:</label>
+  <input type="number" id="symbolCount" min="0" max="5" value="1">
 
   <button onclick="generate()">Generate</button>
 
   <div class="result" id="nameResult"></div>
-  <div class="symbol" id="symbolResult"></div>
 </div>
 
 <script>
-/* hidden lazy code messages below 😴 */
-// TODO: maybe generate infinite names? lol
-// FIXME: why is this so long...
-// HACK: quick fix, just slice it
-// NOTE: don't tell anyone about the math symbols 🤫
+let capsLock = true;
 
 const prefixes = [
   "Kilo","Mega","Giga","Tera","Peta","Exa","Zetta","Yotta",
@@ -84,37 +76,58 @@ const suffixes = ["ium","ion","ite","duium","on","ora","alis","esis","yte","yxis
 
 const mathSymbols = ["Ω","Σ","∞","π","Δ","Φ","Ψ","Λ","Ξ"];
 
+const superScripts = ["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹","⁺","⁻","⁼"];
+const subScripts = ["₀","₁","₂","₃","₄","₅","₆","₇","₈","₉","₊","₋","₌"];
+
 function randomPick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
-function generateSingleWord(targetLength){
-  let name = randomPick(prefixes) + randomPick(middles) + randomPick(suffixes);
-  if(Math.random()<0.25){
-    // insert math symbol somewhere
-    const sym=randomPick(mathSymbols);
-    const pos=Math.floor(Math.random()*(name.length-2))+1;
-    name=name.slice(0,pos)+sym+name.slice(pos);
+function insertRandomSubSuper(str){
+  if(Math.random()<0.3){
+    const arr=str.split("");
+    for(let i=0;i<arr.length;i++){
+      const r=Math.random();
+      if(r<0.1) arr[i]+=randomPick(superScripts);
+      else if(r<0.2) arr[i]+=randomPick(subScripts);
+    }
+    return arr.join("");
   }
-  name=name.toUpperCase();
-  return name;
+  return str;
+}
+
+function generateSingleWord(){
+  let word=randomPick(prefixes) + randomPick(middles) + randomPick(suffixes);
+  // random math symbol
+  if(Math.random()<0.25){
+    const sym=randomPick(mathSymbols);
+    const pos=Math.floor(Math.random()*(word.length-2))+1;
+    word=word.slice(0,pos)+sym+word.slice(pos);
+  }
+  // decide dotted style
+  let dotted=false;
+  if(Math.random()<0.3){
+    dotted=true;
+    const sep=document.getElementById("customSep").value||".";
+    word=word.toUpperCase().split("").join(sep);
+  }
+  word=insertRandomSubSuper(word);
+  if(capsLock && !dotted) word=word.toUpperCase();
+  return word;
 }
 
 function generate(){
   const numWords=parseInt(document.getElementById("nameWords").value)||2;
-  const symbolCount=parseInt(document.getElementById("symbolCount").value)||3;
-
   let words=[];
   for(let i=0;i<numWords;i++){
     words.push(generateSingleWord());
   }
+  const name=words.join(" ");
+  document.getElementById("nameResult").innerText=name;
+}
 
-  const name=words.join(" "); // space-separated words
-
-  let symbols="";
-  for(let i=0;i<symbolCount;i++) symbols+=String.fromCodePoint(0x2600+Math.floor(Math.random()*0xFF))+" ";
-
-  document.getElementById("nameResult").innerText=`Name: ${name}`;
-  document.getElementById("symbolResult").innerText=symbols;
-
-  // i'm so fucking sorry for how bad this website is
+function toggleCaps(){
+  capsLock=!capsLock;
+  generate();
 }
 </script>
+</body>
+</html>
