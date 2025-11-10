@@ -31,6 +31,7 @@
   button { margin-top: 1rem; padding: 0.6rem 1.2rem; background: #0af; border: none; border-radius: 8px; color: #000; font-weight: bold; cursor: pointer; transition: 0.2s; }
   button:hover { background: #09f; transform: scale(1.05); }
   .result { margin-top: 1.5rem; font-size: 1.2rem; word-wrap: break-word; }
+  .symbols { font-size: 1.5rem; margin-top: 0.8rem; }
 </style>
 </head>
 <body>
@@ -45,12 +46,13 @@
   <label for="customSep">Custom Separator (used if dotted style chosen):</label>
   <input type="text" id="customSep" placeholder="- or ! or _ or …" value=".">
 
-  <label for="symbolCount">Number of Math Symbols:</label>
-  <input type="number" id="symbolCount" min="0" max="5" value="1">
+  <label for="symbolCount">Number of Symbols to Display:</label>
+  <input type="number" id="symbolCount" min="0" max="10" value="3">
 
   <button onclick="generate()">Generate</button>
 
   <div class="result" id="nameResult"></div>
+  <div class="symbols" id="symbolResult"></div>
 </div>
 
 <script>
@@ -63,7 +65,7 @@ const prefixes = [
   "Trduper","Trdiga","Trdera","Trdetta","Trdxa",
   "Complex","Ever","Never","Hyper","Omni","Para","Trans","Meta","Neo","Ultra",
   "Stariumi","Starioni","Staritei",
-  "End","True","Absolute","Omega","FinalOfThe","EndOfThe","BreakingThe","FartherThan"
+  "End","True","Absolute","Omega","Final Of The ","End Of The ","Breaking The ","Farther Than "
 ];
 
 const middles = [
@@ -72,10 +74,8 @@ const middles = [
   "hex","ron","ther","ion","chron","aen","xar","del","morph","phyx"
 ];
 
-const suffixes = ["ium","ion","ite","duium","on","ora","alis","esis","yte","yxis"];
-
+const suffixes = ["ium","ion","ite","duium","on","ora","alis","esis","yte","yxis", "uiltimatium"];
 const mathSymbols = ["Ω","Σ","∞","π","Δ","Φ","Ψ","Λ","Ξ"];
-
 const superScripts = ["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹","⁺","⁻","⁼"];
 const subScripts = ["₀","₁","₂","₃","₄","₅","₆","₇","₈","₉","₊","₋","₌"];
 
@@ -96,13 +96,11 @@ function insertRandomSubSuper(str){
 
 function generateSingleWord(){
   let word=randomPick(prefixes) + randomPick(middles) + randomPick(suffixes);
-  // random math symbol
   if(Math.random()<0.25){
     const sym=randomPick(mathSymbols);
     const pos=Math.floor(Math.random()*(word.length-2))+1;
     word=word.slice(0,pos)+sym+word.slice(pos);
   }
-  // decide dotted style
   let dotted=false;
   if(Math.random()<0.3){
     dotted=true;
@@ -116,12 +114,20 @@ function generateSingleWord(){
 
 function generate(){
   const numWords=parseInt(document.getElementById("nameWords").value)||2;
+  const symbolCount=parseInt(document.getElementById("symbolCount").value)||3;
+
   let words=[];
   for(let i=0;i<numWords;i++){
     words.push(generateSingleWord());
   }
-  const name=words.join(" ");
-  document.getElementById("nameResult").innerText=name;
+  document.getElementById("nameResult").innerText=words.join(" ");
+
+  // Generate separate symbols line
+  let symbols="";
+  for(let i=0;i<symbolCount;i++){
+    symbols+=randomPick(mathSymbols)+" ";
+  }
+  document.getElementById("symbolResult").innerText=symbols.trim();
 }
 
 function toggleCaps(){
