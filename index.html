@@ -3,43 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fictional Googology Generator — Ver α</title>
+  <title>Fictional Googology Generator — Ver α++</title>
   <style>
     body {
-      background: radial-gradient(circle at top, #121212, #000);
-      color: #eee;
+      background: radial-gradient(circle at top, #0a0a15, #000);
+      color: #e8e8ff;
       font-family: "JetBrains Mono", monospace;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      margin: 0;
       text-align: center;
+      margin: 0;
     }
-
     h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
       color: #8df;
-      letter-spacing: 1px;
+      margin-bottom: 1rem;
     }
-
     .generator {
       background: rgba(255,255,255,0.05);
       padding: 1.5rem 2rem;
       border-radius: 16px;
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      width: 320px;
+      width: 340px;
       max-width: 90%;
     }
-
     label {
       display: block;
       margin: 0.5rem 0 0.25rem;
       font-weight: bold;
     }
-
     input {
       width: 100%;
       padding: 0.5rem;
@@ -49,7 +43,6 @@
       color: #fff;
       text-align: center;
     }
-
     button {
       margin-top: 1rem;
       padding: 0.6rem 1.2rem;
@@ -61,18 +54,15 @@
       cursor: pointer;
       transition: 0.2s;
     }
-
     button:hover {
       background: #09f;
       transform: scale(1.05);
     }
-
     .result {
       margin-top: 1.5rem;
       font-size: 1.2rem;
       word-wrap: break-word;
     }
-
     .symbol {
       font-size: 1.8rem;
       margin-top: 0.8rem;
@@ -80,10 +70,10 @@
   </style>
 </head>
 <body>
-  <h1>Fictional Googology Generator — Ver α</h1>
+  <h1>Fictional Googology Generator — Ver α++</h1>
   <div class="generator">
-    <label for="nameLength">Name Length (8–45):</label>
-    <input type="number" id="nameLength" min="1" max="100" value="12">
+    <label for="nameLength">Target Length (8–45):</label>
+    <input type="number" id="nameLength" min="8" max="45" value="14">
 
     <label for="symbolCount">Symbol Count:</label>
     <input type="number" id="symbolCount" min="1" max="20" value="3">
@@ -95,62 +85,69 @@
   </div>
 
   <script>
+    // Random Unicode symbol generator
     function randomUnicodeSymbol() {
       const ranges = [
-        [0x2600, 0x26FF], // Misc symbols
-        [0x1F300, 0x1F5FF], // Emojis/symbols
-        [0x2190, 0x21FF], // Arrows
-        [0x2200, 0x22FF]  // Math symbols
+        [0x2600, 0x26FF],
+        [0x1F300, 0x1F5FF],
+        [0x2190, 0x21FF],
+        [0x2200, 0x22FF]
       ];
       const range = ranges[Math.floor(Math.random() * ranges.length)];
       const codePoint = Math.floor(Math.random() * (range[1] - range[0])) + range[0];
       return String.fromCodePoint(codePoint);
     }
 
-    function generateName(nameLength) {
+    function generateBreakologyName(targetLength) {
       const prefixes = [
-        "Ultra", "Mega", "Hyper", "Trans", "Meta", "Super", "Para",
-        "Neo", "Chrono", "Astra", "Omega", "Zeta", "Tetra", "Penta",
-        "Eclip", "Cryo", "Thermo", "Electro", "Plasma", "Quantum"
-      ];
-      const cores = [
-        "vion", "thyn", "glor", "nex", "drion", "ax", "ryth", "tor",
-        "lyon", "mion", "plex", "zon", "tron", "phor", "mir", "lith",
-        "cron", "zar", "ven", "kron"
-      ];
-      const suffixes = [
-        "ion", "ium", "ax", "on", "or", "is", "eus", "yx", "ara", "os",
-        "aris", "exis", "yte", "alis", "esis", "ora"
+        "Kilo","Mega","Giga","Tera","Peta","Exa","Zetta","Yotta",
+        "Xenna","Wecca","Vendeka","Udeka","Treda","Quada","Quinda",
+        "Duper","Duga","Diga","Dera","Deta","Dxa","Detta","Dotta","Donna",
+        "Trduper","Trdiga","Trdera","Trdetta","Trdxa",
+        "Complex","Ever","Never","Hyper","Omni","Para","Trans","Meta","Neo","Ultra",
+        "Stariumi","Starioni","Staritei"
       ];
 
-      let name = prefixes[Math.floor(Math.random() * prefixes.length)] +
-                 cores[Math.floor(Math.random() * cores.length)] +
-                 suffixes[Math.floor(Math.random() * suffixes.length)];
+      const middles = [
+        "glor","vion","cryn","thyn","lyth","dron","nex","kron","tron","zar",
+        "ryth","phor","ven","mir","lith","tros","plex","nion","syon","gath",
+        "hex","ron","ther","ion","chron","aen","xar","del","morph","phyx"
+      ];
 
-      // If user wants longer names, add extra syllables
-      while (name.length < nameLength) {
-        const extra = cores[Math.floor(Math.random() * cores.length)] +
-                      suffixes[Math.floor(Math.random() * suffixes.length)];
-        name += extra;
+      const suffixes = ["ium","ion","ite","duium","on","ora","alis","esis","yte","yxis"];
+
+      // Construct a structured name
+      const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+      const middle = middles[Math.floor(Math.random() * middles.length)];
+      const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+
+      let name = prefix + middle + (Math.random() < 0.3 ? middles[Math.floor(Math.random() * middles.length)] : "") + suffix;
+
+      // Capitalize + trim/pad
+      name = name.charAt(0).toUpperCase() + name.slice(1);
+      if (name.length > targetLength) name = name.slice(0, targetLength);
+      if (name.length < 6) name += suffixes[Math.floor(Math.random() * suffixes.length)];
+
+      // Decide on dot format (normal dot, fully capital)
+      if (Math.random() < 0.3) {
+        name = name.toUpperCase().split("").join(".");
+      } else {
+        name = name[0].toUpperCase() + name.slice(1);
       }
 
-      // Trim if too long
-      name = name.slice(0, nameLength);
       return name;
     }
 
     function generate() {
-      const nameLength = parseInt(document.getElementById('nameLength').value) || 12;
-      const symbolCount = parseInt(document.getElementById('symbolCount').value) || 3;
+      const nameLength = parseInt(document.getElementById("nameLength").value) || 14;
+      const symbolCount = parseInt(document.getElementById("symbolCount").value) || 3;
 
-      const name = generateName(nameLength);
-      let symbols = '';
-      for (let i = 0; i < symbolCount; i++) {
-        symbols += randomUnicodeSymbol() + ' ';
-      }
+      const name = generateBreakologyName(nameLength);
+      let symbols = "";
+      for (let i = 0; i < symbolCount; i++) symbols += randomUnicodeSymbol() + " ";
 
-      document.getElementById('nameResult').innerText = `Name: ${name}`;
-      document.getElementById('symbolResult').innerText = symbols;
+      document.getElementById("nameResult").innerText = `Name: ${name}`;
+      document.getElementById("symbolResult").innerText = symbols;
     }
   </script>
 </body>
