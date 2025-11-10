@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fictional Googology Generator — Ver α++</title>
+  <title>Fictional Googology Generator — Ver Γ</title>
   <style>
     body {
       background: radial-gradient(circle at top, #0a0a15, #000);
@@ -17,138 +17,104 @@
       text-align: center;
       margin: 0;
     }
-    h1 {
-      color: #8df;
-      margin-bottom: 1rem;
-    }
+    h1 { color: #8df; margin-bottom: 1rem; }
     .generator {
       background: rgba(255,255,255,0.05);
       padding: 1.5rem 2rem;
       border-radius: 16px;
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      width: 340px;
+      width: 360px;
       max-width: 90%;
     }
-    label {
-      display: block;
-      margin: 0.5rem 0 0.25rem;
-      font-weight: bold;
-    }
+    label { display: block; margin: 0.5rem 0 0.25rem; font-weight: bold; }
     input {
-      width: 100%;
-      padding: 0.5rem;
-      border: none;
-      border-radius: 6px;
-      background: #111;
-      color: #fff;
-      text-align: center;
+      width: 100%; padding: 0.5rem; border: none; border-radius: 6px;
+      background: #111; color: #fff; text-align: center;
     }
     button {
-      margin-top: 1rem;
-      padding: 0.6rem 1.2rem;
-      background: #0af;
-      border: none;
-      border-radius: 8px;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
+      margin-top: 1rem; padding: 0.6rem 1.2rem;
+      background: #0af; border: none; border-radius: 8px;
+      color: #000; font-weight: bold; cursor: pointer;
       transition: 0.2s;
     }
-    button:hover {
-      background: #09f;
-      transform: scale(1.05);
-    }
-    .result {
-      margin-top: 1.5rem;
-      font-size: 1.2rem;
-      word-wrap: break-word;
-    }
-    .symbol {
-      font-size: 1.8rem;
-      margin-top: 0.8rem;
-    }
+    button:hover { background: #09f; transform: scale(1.05); }
+    .result { margin-top: 1.5rem; font-size: 1.2rem; word-wrap: break-word; }
+    .symbol { font-size: 1.8rem; margin-top: 0.8rem; }
   </style>
 </head>
 <body>
-  <h1>Fictional Googology Generator — Ver α++</h1>
-  <div class="generator">
-    <label for="nameLength">Target Length (8–45):</label>
-    <input type="number" id="nameLength" min="8" max="45" value="14">
+<h1>Fictional Googology Generator — Ver Γ</h1>
+<div class="generator">
+  <label for="nameWords">Number of Words (1–5):</label>
+  <input type="number" id="nameWords" min="1" max="5" value="2">
 
-    <label for="symbolCount">Symbol Count:</label>
-    <input type="number" id="symbolCount" min="1" max="20" value="3">
+  <label for="symbolCount">Symbol Count:</label>
+  <input type="number" id="symbolCount" min="1" max="20" value="3">
 
-    <button onclick="generate()">Generate</button>
+  <button onclick="generate()">Generate</button>
 
-    <div class="result" id="nameResult"></div>
-    <div class="symbol" id="symbolResult"></div>
-  </div>
+  <div class="result" id="nameResult"></div>
+  <div class="symbol" id="symbolResult"></div>
+</div>
 
-  <script>
-    // Random Unicode symbol generator
-    function randomUnicodeSymbol() {
-      const ranges = [
-        [0x2600, 0x26FF],
-        [0x1F300, 0x1F5FF],
-        [0x2190, 0x21FF],
-        [0x2200, 0x22FF]
-      ];
-      const range = ranges[Math.floor(Math.random() * ranges.length)];
-      const codePoint = Math.floor(Math.random() * (range[1] - range[0])) + range[0];
-      return String.fromCodePoint(codePoint);
-    }
+<script>
+/* hidden lazy code messages below 😴 */
+// TODO: maybe generate infinite names? lol
+// FIXME: why is this so long...
+// HACK: quick fix, just slice it
+// NOTE: don't tell anyone about the math symbols 🤫
 
-    function generateBreakologyName(targetLength) {
-      const prefixes = [
-        "Kilo","Mega","Giga","Tera","Peta","Exa","Zetta","Yotta",
-        "Xenna","Wecca","Vendeka","Udeka","Treda","Quada","Quinda",
-        "Duper","Duga","Diga","Dera","Deta","Dxa","Detta","Dotta","Donna",
-        "Trduper","Trdiga","Trdera","Trdetta","Trdxa",
-        "Complex","Ever","Never","Hyper","Omni","Para","Trans","Meta","Neo","Ultra",
-        "Stariumi","Starioni","Staritei"
-      ];
+const prefixes = [
+  "Kilo","Mega","Giga","Tera","Peta","Exa","Zetta","Yotta",
+  "Xenna","Wecca","Vendeka","Udeka","Treda","Quada","Quinda",
+  "Duper","Duga","Diga","Dera","Deta","Dxa","Detta","Dotta","Donna",
+  "Trduper","Trdiga","Trdera","Trdetta","Trdxa",
+  "Complex","Ever","Never","Hyper","Omni","Para","Trans","Meta","Neo","Ultra",
+  "Stariumi","Starioni","Staritei",
+  "End","True","Absolute","Omega","FinalOfThe","EndOfThe","BreakingThe","FartherThan"
+];
 
-      const middles = [
-        "glor","vion","cryn","thyn","lyth","dron","nex","kron","tron","zar",
-        "ryth","phor","ven","mir","lith","tros","plex","nion","syon","gath",
-        "hex","ron","ther","ion","chron","aen","xar","del","morph","phyx"
-      ];
+const middles = [
+  "glor","vion","cryn","thyn","lyth","dron","nex","kron","tron","zar",
+  "ryth","phor","ven","mir","lith","tros","plex","nion","syon","gath",
+  "hex","ron","ther","ion","chron","aen","xar","del","morph","phyx"
+];
 
-      const suffixes = ["ium","ion","ite","duium","on","ora","alis","esis","yte","yxis"];
+const suffixes = ["ium","ion","ite","duium","on","ora","alis","esis","yte","yxis"];
 
-      // Construct a structured name
-      const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-      const middle = middles[Math.floor(Math.random() * middles.length)];
-      const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+const mathSymbols = ["Ω","Σ","∞","π","Δ","Φ","Ψ","Λ","Ξ"];
 
-      let name = prefix + middle + (Math.random() < 0.3 ? middles[Math.floor(Math.random() * middles.length)] : "") + suffix;
+function randomPick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
-      // Capitalize + trim/pad
-      name = name.charAt(0).toUpperCase() + name.slice(1);
-      if (name.length > targetLength) name = name.slice(0, targetLength);
-      if (name.length < 6) name += suffixes[Math.floor(Math.random() * suffixes.length)];
+function generateSingleWord(targetLength){
+  let name = randomPick(prefixes) + randomPick(middles) + randomPick(suffixes);
+  if(Math.random()<0.25){
+    // insert math symbol somewhere
+    const sym=randomPick(mathSymbols);
+    const pos=Math.floor(Math.random()*(name.length-2))+1;
+    name=name.slice(0,pos)+sym+name.slice(pos);
+  }
+  name=name.toUpperCase();
+  return name;
+}
 
-      // Decide on dot format (normal dot, fully capital)
-      if (Math.random() < 0.3) {
-        name = name.toUpperCase().split("").join(".");
-      } else {
-        name = name[0].toUpperCase() + name.slice(1);
-      }
+function generate(){
+  const numWords=parseInt(document.getElementById("nameWords").value)||2;
+  const symbolCount=parseInt(document.getElementById("symbolCount").value)||3;
 
-      return name;
-    }
+  let words=[];
+  for(let i=0;i<numWords;i++){
+    words.push(generateSingleWord());
+  }
 
-    function generate() {
-      const nameLength = parseInt(document.getElementById("nameLength").value) || 14;
-      const symbolCount = parseInt(document.getElementById("symbolCount").value) || 3;
+  const name=words.join(" "); // space-separated words
 
-      const name = generateBreakologyName(nameLength);
-      let symbols = "";
-      for (let i = 0; i < symbolCount; i++) symbols += randomUnicodeSymbol() + " ";
+  let symbols="";
+  for(let i=0;i<symbolCount;i++) symbols+=String.fromCodePoint(0x2600+Math.floor(Math.random()*0xFF))+" ";
 
-      document.getElementById("nameResult").innerText = `Name: ${name}`;
-      document.getElementById("symbolResult").innerText = symbols;
-    }
-  </script>
-</body>
-</html>
+  document.getElementById("nameResult").innerText=`Name: ${name}`;
+  document.getElementById("symbolResult").innerText=symbols;
+
+  // i'm so fucking sorry for how bad this website is
+}
+</script>
