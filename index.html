@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fictional Googology Generator — Ver α</title>
+  <style>
+    body {
+      background: radial-gradient(circle at top, #121212, #000);
+      color: #eee;
+      font-family: "JetBrains Mono", monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #8df;
+      letter-spacing: 1px;
+    }
+
+    .generator {
+      background: rgba(255,255,255,0.05);
+      padding: 1.5rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      width: 320px;
+      max-width: 90%;
+    }
+
+    label {
+      display: block;
+      margin: 0.5rem 0 0.25rem;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 6px;
+      background: #111;
+      color: #fff;
+      text-align: center;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      background: #0af;
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #09f;
+      transform: scale(1.05);
+    }
+
+    .result {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      word-wrap: break-word;
+    }
+
+    .symbol {
+      font-size: 1.8rem;
+      margin-top: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fictional Googology Generator — Ver α</h1>
+  <div class="generator">
+    <label for="nameLength">Name Length (8–45):</label>
+    <input type="number" id="nameLength" min="1" max="100" value="12">
+
+    <label for="symbolCount">Symbol Count:</label>
+    <input type="number" id="symbolCount" min="1" max="20" value="3">
+
+    <button onclick="generate()">Generate</button>
+
+    <div class="result" id="nameResult"></div>
+    <div class="symbol" id="symbolResult"></div>
+  </div>
+
+  <script>
+    function randomChar() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+      return chars[Math.floor(Math.random() * chars.length)];
+    }
+
+    function randomUnicodeSymbol() {
+      // Select from interesting Unicode ranges (math symbols, stars, etc.)
+      const ranges = [
+        [0x2600, 0x26FF], // Misc symbols
+        [0x1F300, 0x1F5FF], // Emojis/symbols
+        [0x2190, 0x21FF], // Arrows
+        [0x2200, 0x22FF]  // Math symbols
+      ];
+      const range = ranges[Math.floor(Math.random() * ranges.length)];
+      const codePoint = Math.floor(Math.random() * (range[1] - range[0])) + range[0];
+      return String.fromCodePoint(codePoint);
+    }
+
+    function generate() {
+      const nameLength = parseInt(document.getElementById('nameLength').value) || 12;
+      const symbolCount = parseInt(document.getElementById('symbolCount').value) || 3;
+
+      // Generate fictional "googology name"
+      let name = '';
+      for (let i = 0; i < nameLength; i++) {
+        name += randomChar();
+      }
+      // Capitalize the first letter
+      name = name.charAt(0).toUpperCase() + name.slice(1);
+
+      // Generate Unicode symbols
+      let symbols = '';
+      for (let i = 0; i < symbolCount; i++) {
+        symbols += randomUnicodeSymbol() + ' ';
+      }
+
+      document.getElementById('nameResult').innerText = `Name: ${name}`;
+      document.getElementById('symbolResult').innerText = symbols;
+    }
+  </script>
+</body>
+</html>
