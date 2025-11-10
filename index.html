@@ -95,13 +95,7 @@
   </div>
 
   <script>
-    function randomChar() {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-      return chars[Math.floor(Math.random() * chars.length)];
-    }
-
     function randomUnicodeSymbol() {
-      // Select from interesting Unicode ranges (math symbols, stars, etc.)
       const ranges = [
         [0x2600, 0x26FF], // Misc symbols
         [0x1F300, 0x1F5FF], // Emojis/symbols
@@ -113,19 +107,43 @@
       return String.fromCodePoint(codePoint);
     }
 
+    function generateName(nameLength) {
+      const prefixes = [
+        "Ultra", "Mega", "Hyper", "Trans", "Meta", "Super", "Para",
+        "Neo", "Chrono", "Astra", "Omega", "Zeta", "Tetra", "Penta",
+        "Eclip", "Cryo", "Thermo", "Electro", "Plasma", "Quantum"
+      ];
+      const cores = [
+        "vion", "thyn", "glor", "nex", "drion", "ax", "ryth", "tor",
+        "lyon", "mion", "plex", "zon", "tron", "phor", "mir", "lith",
+        "cron", "zar", "ven", "kron"
+      ];
+      const suffixes = [
+        "ion", "ium", "ax", "on", "or", "is", "eus", "yx", "ara", "os",
+        "aris", "exis", "yte", "alis", "esis", "ora"
+      ];
+
+      let name = prefixes[Math.floor(Math.random() * prefixes.length)] +
+                 cores[Math.floor(Math.random() * cores.length)] +
+                 suffixes[Math.floor(Math.random() * suffixes.length)];
+
+      // If user wants longer names, add extra syllables
+      while (name.length < nameLength) {
+        const extra = cores[Math.floor(Math.random() * cores.length)] +
+                      suffixes[Math.floor(Math.random() * suffixes.length)];
+        name += extra;
+      }
+
+      // Trim if too long
+      name = name.slice(0, nameLength);
+      return name;
+    }
+
     function generate() {
       const nameLength = parseInt(document.getElementById('nameLength').value) || 12;
       const symbolCount = parseInt(document.getElementById('symbolCount').value) || 3;
 
-      // Generate fictional "googology name"
-      let name = '';
-      for (let i = 0; i < nameLength; i++) {
-        name += randomChar();
-      }
-      // Capitalize the first letter
-      name = name.charAt(0).toUpperCase() + name.slice(1);
-
-      // Generate Unicode symbols
+      const name = generateName(nameLength);
       let symbols = '';
       for (let i = 0; i < symbolCount; i++) {
         symbols += randomUnicodeSymbol() + ' ';
